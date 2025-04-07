@@ -1,0 +1,5 @@
+services:
+  app:
+    image: jackolake/comm5963_web_ui_demo:latest
+    ports:
+      - "80:80"

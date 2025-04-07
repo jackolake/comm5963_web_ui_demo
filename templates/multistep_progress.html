@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %} Multistep Progress Bar {% endblock title %}
+{% block styles %}
+<style>
+    #progress-bar-bg { width: 100%; height: 5px }
+    #progress-bar { width: 0; height: 3px }
+    /* Optional: Smooth transition */
+    .smooth-animation { transition: all 0.5s ease }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card p-3">
+    <div class="card-header border border-3"><h1>Progress bar</h1></div>
+    <div class="card-body border border-1">
+        <div class="position-relative d-flex justify-content-between p-0">
+            <!-- Store current state -->
+            <input id="storage" type="hidden" data-current-step="1"/>
+            <!-- Progress bar -->
+            <div id="progress-bar-bg" class="bg-primary-subtle position-absolute top-50 z-0"></div>
+            <div id="progress-bar" class="bg-primary position-absolute top-50 z-1 smooth-animation"></div>
+            <!-- Checkpoints -->
+            <div id="step-1" class="d-flex btn btn-lg btn-primary rounded-pill z-2 smooth-animation">1</div>
+            <div id="step-2" class="d-flex btn btn-lg btn-secondary rounded-pill z-2 smooth-animation">2</div>
+            <div id="step-3" class="d-flex btn btn-lg btn-secondary rounded-pill z-2 smooth-animation">3</div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between border border-1">
+        <!-- Control bar -->
+        <button class="btn btn-outline-primary" id="button-prev" style="visibility: hidden">Prev</button>
+        <button class="btn btn-outline-primary" id="button-next">Next</button>
+    </div>
+</div>
+<script>
+    function updateStep(ev) {
+        const storage = document.querySelector('#storage')
+        let currentStep = parseInt(storage.getAttribute('data-current-step'))
+        currentStep = currentStep + (ev.target.id === "button-next" ? 1 : -1)
+        currentStep = Math.min(Math.max(currentStep, 1), 3)  // Make sure it does not go outside 1~3
+        storage.setAttribute('data-current-step', String(currentStep))
+        // Update the circles
+        for (let i=1; i <= 3; i++){
+            const button = document.querySelector(`#step-${i}`)
+            button.classList.remove(i <= currentStep ? 'btn-secondary' : 'btn-primary')
+            button.classList.add(i <= currentStep ? 'btn-primary' : 'btn-secondary')
+        }
+        // Update the progress bar
+        document.querySelector('#progress-bar').style.width = `${(currentStep-1)/(3-1)*100}%`
+        // Update Prev / Next Buttons
+        document.querySelector('#button-prev').style.visibility = currentStep > 1 ? "" : "hidden"
+        document.querySelector('#button-next').style.visibility = currentStep < 3 ? "" : "hidden"
+    }
+    document.querySelector('#button-prev').addEventListener("click", updateStep)
+    document.querySelector('#button-next').addEventListener("click", updateStep)
+</script>
+{% endblock content %}

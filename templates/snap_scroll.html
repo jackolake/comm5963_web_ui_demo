@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %} Snap Scrolling {% endblock title %}
+{% block styles %}
+<style>
+    html {
+        scroll-snap-type: y mandatory;
+        scroll-padding-top: 150px
+    }
+    section {
+        scroll-snap-align: start;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div>
+    <section>
+        <div class="card w-90 m-5 vh-100">
+            <div class="card-header bg-success text-white"><h1>Hello!</h1></div>
+            <div class="card-body bg-success-subtle">
+                <img class="w-100" src="https://c02.purpledshub.com/uploads/sites/62/2024/12/Red-panda-vs-giant-panda-Getty-Images-1.png?w=1320&webp=1">
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="card w-90 m-5 vh-100">
+            <div class="card-header bg-warning text-white"><h1>Baby Red Panda</h1></div>
+            <div class="card-body bg-warning-subtle">
+                <img class="w-100" src="https://cvm.msu.edu/assets/images/news/vetschool-tails/_insideLanding/red-panda-cub2-bottle-feed.jpg">
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="card w-90 m-5 vh-100">
+            <div class="card-header bg-danger text-white"><h1>Red Panda</h1></div>
+            <div class="card-body bg-danger-subtle">
+                <img class="w-100" src="https://i.etsystatic.com/27572793/r/il/788410/2853783170/il_1588xN.2853783170_k3be.jpg">
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
