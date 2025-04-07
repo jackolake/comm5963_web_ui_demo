@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %} Like Button {% endblock title %}
+{% block styles %}
+<style>
+    #progress-bar-bg { width: 100%; height: 5px }
+    #progress-bar { width: 0; height: 3px }
+    /* Optional: Smooth transition */
+    .smooth-animation { transition: all 0.5s ease }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card p-3">
+    <div class="card-header border border-3"><h1>Click this button</h1></div>
+    <div class="card-body border border-1">
+        <div id="likeArea" class="container">
+          <h2>Post 1</h2>
+          <button id="likeButton1" data-post-id="1" data-active="0" class="btn btn-outline-primary">👍</button>
+          <h2>Post 2</h2>
+          <button id="likeButton2" data-post-id="2" data-active="0" class="btn btn-outline-primary">👍</button>
+        </div>
+    </div>
+    <div class="card-footer">
+        <span id="likeCount"></span>
+    </div>
+</div>
+<script>
+    for (const element of document.querySelectorAll('#likeArea button')){
+      element.addEventListener("click", ev => {
+        const isActive = (ev.target.getAttribute("data-active") === "1")
+        const newState = !isActive
+        ev.target.setAttribute("data-active", newState ? "1" : "0")
+        // Update data
+        const postId = ev.target.getAttribute("data-post-id")
+        const xhrLike = new XMLHttpRequest()
+        xhrLike.open('GET', `${newState ? "like" : "unlike"}?post_id=${postId}`)
+        xhrLike.send()
+        // Update UI
+        ev.target.classList.remove(newState ? "btn-outline-primary" : "btn-primary")
+        ev.target.classList.add(newState ? "btn-primary" : "btn-outline-primary")
+        ev.target.innerText = newState ? "👍 Liked" : "👍"
+        // Query latest count
+        const xhrResult = new XMLHttpRequest()
+        xhrResult.open('GET', `view_like?post_id=${postId}`)
+        xhrResult.onload = () => {
+          document.querySelector("#likeCount").innerText = `Post ${postId} Like Count = ${xhrResult.response}`
+        }
+        xhrResult.send()
+      })
+    }
+</script>
+{% endblock content %}
